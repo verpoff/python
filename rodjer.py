@@ -15,8 +15,12 @@ print('Ты готов? (да или нет)')
 
 ready = input()
 if ready == 'да':
-    print("сколько примеров ты готов решить?")
-    maximum_answer = input()
+    print("До скольки будем считать?")
+    maximum_answer = int(input())
+
+    while maximum_answer < 2:
+        print("введи число больше 1")
+        maximum_answer = int(input())
 
     # случайным образом сгенерируем
     numeric1 = randint(1, maximum_answer)  # левый операнд
