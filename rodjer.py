@@ -14,7 +14,21 @@ sleep(1)
 print('Ты готов? (да или нет)')
 
 ready = input()
+while ready not in ('да', 'нет'):
+    print("Должно быть да или нет")
+    ready = input()
 if ready == 'да':
+    answers_quantity = ''
+    while not answers_quantity.isdigit():
+        print(name+", сколько присеров ты готов решить")
+        answers_quantity = input()
+        print("Должна быть цифра")
+        if answers_quantity.isdigit():
+            while int(answers_quantity) < 1:
+                print('')
+        else:
+            print("Должна быть цифра")
+
     print("До скольки будем считать?")
     maximum_answer = int(input())
 
