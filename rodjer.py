@@ -26,8 +26,12 @@ if ready == 'да':
    answers_quantity = ''  # количество примеров
    maximum_answer = ''  # до скольки будет считать
    question = ''
-
-
+   correct_answers = 0
+   fails = 0
+   time_in_second = 0
+   start = default_timer()
+   input()
+   stop = default_timer()
    while not answers_quantity.isdigit():
        print(name + ", сколько примеров ты готов решить?")
        answers_quantity = input()
@@ -82,14 +86,27 @@ if ready == 'да':
 
            print("сколько будет " + str(numeric1) +str(sign) +str(numeric2))
 
-           student_answer = int(input())
+           student_answer = input()
 
-           if student_answer == correct_answer:
-               print("Правильно,молодец!")
+           while not student_answer.isdigit():
+               print("Должна быть цифра")
+               student_answer = input()
+
+           if int(student_answer) == correct_answer:
+               print("Правильно, молодец!")
+               correct_answers += 1
            else:
                print("Неправильно")
                print("Правильный ответ: " +str(correct_answer))
-
+               fails += 1
+   if fails == 0:
+       print(f'Молодец {name}! Ты правильно ответил на все вопросы ' )
+   elif correct_answers == 0:
+       print("Ты не ответил ни на один вопрос правильно!")
+   else:
+       print(f"Ты правильно ответил на {correct_answers} вопроса")
+       sleep(1)
+       print(f"Ошибок {fails}")
 if ready == 'нет':
     print('''Передумал? Хорошо, может как-нибудь в следующий раз...
 Пока!''')

@@ -56,6 +56,6 @@ while command:
     if command == "stop":
 
         if car_go:
-
+            if
     print("Введите команду")
     command = input()
