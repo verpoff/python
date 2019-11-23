@@ -3,24 +3,25 @@ from timeit import default_timer
 from time import sleep
 from random import randint, choice
 
-print('Hello! My name is Rodjer. And you name?')
-name = input()
-name = name.title()
 
-print('Welcome ' + name)
-sleep(1)
-print('Lets check your math knowledge.')
-sleep(1)
-print('You are ready (yes or no)')
+def select_mode():
+    print("1 = workout")
+    print("0 = exit")
 
-ready = input()
+    mode = input()
+    while mode not in  {'0','1'}:
+        print("Should be '0' or '1' '")
+        mode = input()
 
-while ready not in {'yes', 'no'}:
-    print('''Should be 'yes' or 'no'
-Введи заново''')
-    ready = input()
+    return mode
 
-if ready == 'yes':
+
+def count():
+
+    sleep(1)
+    print('Lets check your math knowledge.')
+    sleep(1)
+
 
     answers_quantity = ''  # количество примеров
     maximum_answer = ''  # до скольки будет считать
@@ -30,7 +31,7 @@ if ready == 'yes':
     time_in_seconds = 0
 
     while not answers_quantity.isdigit():
-        print(name + "How many mathematical actions are you ready to solve?")
+        print(name + " How many mathematical actions are you ready to solve?")
         answers_quantity = input()
 
         if answers_quantity.isdigit():
@@ -40,25 +41,24 @@ if ready == 'yes':
                 while not answers_quantity.isdigit():
                     print("Must be number")
                     answers_quantity = input()
-        else:
-            print("Должна быть цифра")
+
 
     while not maximum_answer.isdigit():
-        print("До скольки будем считать")
+        print("How many will be count")
         maximum_answer = input()
 
         if maximum_answer.isdigit():
             while int(maximum_answer) < 2:
-                print("Введи число больше 1")
+                print("enter a number more then 1")
                 maximum_answer = input()
                 while not maximum_answer.isdigit():
-                    print("Должна быть цифра")
+                    print("Must be number")
                     maximum_answer = input()
         else:
-            print("Должна быть цифра")
+            print("Must be number")
 
         for question in range(int(answers_quantity)):
-            print("Пример " + str(question + 1))
+            print("Example " + str(question + 1))
 
             # случайным образом сгенерируем
             numeric1 = randint(1, int(maximum_answer))  # левый операнд
@@ -81,7 +81,7 @@ if ready == 'yes':
 
                 correct_answer = numeric1 + numeric2
 
-            print("сколько будет " + str(numeric1) + str(sign) + str(numeric2))
+            print("How much will " + str(numeric1) + str(sign) + str(numeric2))
 
             start = default_timer()
             student_answer = input()
@@ -89,32 +89,54 @@ if ready == 'yes':
             time_in_seconds += round(stop - start)
 
             while not student_answer.isdigit():
-                print("Должна быть цифра")
+                print("Must be number")
                 student_answer = input()
 
             if int(student_answer) == correct_answer:
-                print("Правильно, молодец!")
+                print("Excellent!")
                 correct_answers += 1
             else:
-                print("Неправильно")
-                print("Правильный ответ: " + str(correct_answer))
+                print("Wrong answer")
+                print("Correct answer: " + str(correct_answer))
                 fails += 1
+                with open (f'[name]_errors','a')as f:
+                    f.write(f'{number1} {sigh} {number2} 3')
+
+
 
     if time_in_seconds < 60:
-        spend_time = f"Ты справился за {time_in_seconds} секунд"
+        spend_time = f"{time_in_seconds} seconds"
     else:
         minutes = time_in_seconds // 60
         seconds = time_in_seconds - (minutes * 60)
         if seconds > 0:
-        spend_time = f"Ты справился за {minutes} минут и {seconds} секунд"
+             spend_time = f"{minutes} minutes and {seconds} seconds"
     if fails == 0:
-        print(f'Молодец {name}! Ты правильно ответил на все вопросы ')
+        print(f"You got it {spend_time}")
+        print(f'Well done, {name}! You answered all the questions correctly ')
     elif correct_answers == 0:
-        print("Ты не ответил ни на один вопрос правильно!")
+        print("You did not answer all the questions correctly!")
     else:
-        print(f"Ты правильно ответил на {correct_answers} вопроса")
+        print(f"You answered {correct_answers} questions")
         sleep(1)
-        print(f"Ошибок {fails}")
-if ready == 'нет':
-    print('''Передумал? Хорошо, может как-нибудь в следующий раз...
-Пока!''')
+        print(f"Fails {fails}")
+
+
+# maim program block
+print('Hello! My name is Rodjer. And you name?')
+name = input()
+name = name.title()
+
+print('Welcome ' + name)
+
+while True:
+
+
+    mode = select_mode()
+
+    if mode == "1":
+       count()
+    elif mode == '0':
+        break
+    else:
+        pass
