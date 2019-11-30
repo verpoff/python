@@ -2,16 +2,30 @@
 from timeit import default_timer
 from time import sleep
 from random import randint, choice
-
+import os
 
 def select_mode():
-    print("1 = workout")
-    print("0 = exit")
+    if not os.path.exists(f'{name}_errors.txt'):
 
-    mode = input()
-    while mode not in  {'0','1'}:
-        print("Should be '0' or '1' '")
+        print("1 = workout")
+        print("0 = exit")
+
+
         mode = input()
+        while mode not in  {'0','1'}:
+            print("Should be '0' or '1' ")
+            mode = input()
+
+    else:
+
+        print("1 = workout")
+        print("2 = error handling")
+        print("0 = exit")
+
+        mode = input()
+        while mode not in {'0', '1', '2'}:
+            print("Should be '0', '2' or '1' ")
+            mode = input()
 
     return mode
 
@@ -99,8 +113,8 @@ def count():
                 print("Wrong answer")
                 print("Correct answer: " + str(correct_answer))
                 fails += 1
-                with open (f'[name]_errors','a')as f:
-                    f.write(f'{number1} {sigh} {number2} 3')
+                with open(f'{name}_errors.txt','a')as f:
+                    f.write(f'{numeric1} {sign} {numeric2} 3\n')
 
 
 
@@ -122,7 +136,13 @@ def count():
         print(f"Fails {fails}")
 
 
-# maim program block
+def fix_errors():
+    with open(f'{name}_errors.txt', 'r') as f2:
+        line = f2.readline()
+        print(line)
+
+
+# main program block
 print('Hello! My name is Rodjer. And you name?')
 name = input()
 name = name.title()
@@ -138,5 +158,7 @@ while True:
        count()
     elif mode == '0':
         break
+    elif mode == '2':
+        fix_errors()
     else:
         pass
