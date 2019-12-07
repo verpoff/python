@@ -71,6 +71,9 @@ def count():
         else:
             print("Must be number")
 
+        my_warnings = ["Wrong","look at the your answer","Wrong digit"]
+
+
         for question in range(int(answers_quantity)):
             print("Example " + str(question + 1))
 
@@ -110,7 +113,7 @@ def count():
                 print("Excellent!")
                 correct_answers += 1
             else:
-                print("Wrong answer")
+                print(my_warnings[randint(0, len(my_warnings))-1])
                 print("Correct answer: " + str(correct_answer))
                 fails += 1
                 with open(f'{name}_errors.txt','a')as f:
@@ -139,8 +142,20 @@ def count():
 def fix_errors():
     with open(f'{name}_errors.txt', 'r') as f2:
         line = f2.readline()
-        print(line)
+        splited = line.split()
 
+        number1,sigh,number2,repeat = splited
+        number1 = int(number1)
+        number2 = int(number2)
+
+        print(f"{number1} {sigh} {number2}")
+        if sigh == '-' :
+            correct_answer = number1 - number2
+        elif sigh == '+':
+            correct_answer = number1 + number2
+        else:
+            pass
+            answer = input()
 
 # main program block
 print('Hello! My name is Rodjer. And you name?')
