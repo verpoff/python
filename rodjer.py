@@ -140,22 +140,37 @@ def count():
 
 
 def fix_errors():
-    with open(f'{name}_errors.txt', 'r') as f2:
-        line = f2.readline()
-        splited = line.split()
+    with open(f'{name}_errors.txt', 'r') as f, open(f'tmp_{name}_errors.txt', 'a') as f2:
 
-        number1,sigh,number2,repeat = splited
-        number1 = int(number1)
-        number2 = int(number2)
+        line = f.readline()
 
-        print(f"{number1} {sigh} {number2}")
-        if sigh == '-' :
-            correct_answer = number1 - number2
-        elif sigh == '+':
-            correct_answer = number1 + number2
-        else:
-            pass
-            answer = input()
+        while line:
+            splited = line.split()
+
+            number1,sign,number2,repeat = splited
+            number1 = int(number1)
+            number2 = int(number2)
+
+            print(f"{number1} {sign} {number2}")
+            if sign == '-' :
+                correct_answer = number1 - number2
+
+            if sign == '+':
+                correct_answer = number1 + number2
+
+            answer = int(input())
+            if answer == correct_answer:
+                print("Correct")
+                if int(repeat) > 1:
+                    f2.write(f'{number1} {sign} {number2} {int(repeat)-1}\n')
+            else:
+                print ("Wrong")
+                f2.write(f'{number1} {sign} {number2} {repeat}\n')
+
+            line = f.readline()
+
+    os.remove(f'{name}_errors.txt')
+    os.rename(f'tmp_{name}_errors.txt', f'{name}_errors.txt')
 
 # main program block
 print('Hello! My name is Rodjer. And you name?')
