@@ -8,23 +8,25 @@ def select_mode():
     if not os.path.exists(f'{name}_errors.txt'):
 
         print("1 = workout")
+        print('2 = settings')
         print("0 = exit")
 
 
         mode = input()
-        while mode not in  {'0','1'}:
-            print("Should be '0' or '1' ")
+        while mode not in  {'0','1','2'}:
+            print("Should be '0', '2' or '1' ")
             mode = input()
 
-    else:
+    elif os.path.exists(f'{name}_errors.txt'):
 
         print("1 = workout")
         print("2 = error handling")
+        print("3 = settings")
         print("0 = exit")
 
         mode = input()
-        while mode not in {'0', '1', '2'}:
-            print("Should be '0', '2' or '1' ")
+        while mode not in {'0', '1', '2', '3'}:
+            print("Should be '0', '2', '1' or '3' ")
             mode = input()
 
     return mode
@@ -139,56 +141,69 @@ def count():
         print(f"Fails {fails}")
 
 
-def fix_errors():
-    with open(f'{name}_errors.txt', 'r') as f, open(f'tmp_{name}_errors.txt', 'a') as f2:
+def fix_errors(name):
+    file = f'{name}_errors.txt'
+    tmp_file = f'tmp_{name}_errors.txt'
 
-        line = f.readline()
+    if os.path.exists(file):
 
-        while line:
-            splited = line.split()
+        with open(file, 'r') as f, open(tmp_file, 'a') as f2:
 
-            number1,sign,number2,repeat = splited
-            number1 = int(number1)
-            number2 = int(number2)
+            for line in f:
+                splited = line.split()
 
-            print(f"{number1} {sign} {number2}")
-            if sign == '-' :
-                correct_answer = number1 - number2
+                number1,sign,number2,repeat = splited
+                number1 = int(number1)
+                number2 = int(number2)
 
-            if sign == '+':
-                correct_answer = number1 + number2
+                print(f"{number1} {sign} {number2}")
+                if sign == '-' :
+                    correct_answer = number1 - number2
 
-            answer = int(input())
-            if answer == correct_answer:
-                print("Correct")
-                if int(repeat) > 1:
+                if sign == '+':
+                    correct_answer = number1 + number2
+
+                my_warnings = ["Wrong", "look at the your answer", "Wrong digit"]
+                my_congratulation = ['Right','Correct','Wonderful']
+
+                answer = int(input())
+                if answer == correct_answer:
+                    print(my_congratulation[randint(0, len(my_congratulation)) - 1])
                     f2.write(f'{number1} {sign} {number2} {int(repeat)-1}\n')
-            else:
-                print ("Wrong")
-                f2.write(f'{number1} {sign} {number2} {repeat}\n')
+                else:
+                    print(my_warnings[randint(0, len(my_warnings)) - 1])
+                    f2.write(f'{number1} {sign} {number2} {repeat}\n')
 
-            line = f.readline()
 
-    os.remove(f'{name}_errors.txt')
-    os.rename(f'tmp_{name}_errors.txt', f'{name}_errors.txt')
+
+    os.remove(file)
+    if os.path.exists(tmp_file):
+        os.rename(tmp_file, file)
+        if os.path.getsize(file) <1:
+            os.remove(file)
 
 # main program block
 print('Hello! My name is Rodjer. And you name?')
 name = input()
 name = name.title()
 
+def settings():
+    pass
+
 print('Welcome ' + name)
 
 while True:
 
-
-    mode = select_mode()
+    if os.path.exists(f'{name}_errors.txt'):
+        mode = select_mode()
 
     if mode == "1":
-       count()
+        count()
     elif mode == '0':
         break
     elif mode == '2':
-        fix_errors()
+        fix_errors(name)
+    elif mode == '3':
+        settings()
     else:
         pass
