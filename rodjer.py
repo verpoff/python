@@ -45,6 +45,9 @@ def count():
     correct_answers = 0
     fails = 0
     time_in_seconds = 0
+    example_number = 0
+    unique_examples = []
+
 
     while not answers_quantity.isdigit():
         print(name + " How many mathematical actions are you ready to solve?")
@@ -75,9 +78,11 @@ def count():
 
         my_warnings = ["Wrong","look at the your answer","Wrong digit"]
 
+    col_unique_examples = int(maximum_answer) ** 2
 
-        for question in range(int(answers_quantity)):
-            print("Example " + str(question + 1))
+    while example_number < col_unique_examples:
+
+        for i in range(int(answers_quantity)):
 
             # случайным образом сгенерируем
             numeric1 = randint(1, int(maximum_answer))  # левый операнд
@@ -100,27 +105,33 @@ def count():
 
                 correct_answer = numeric1 + numeric2
 
-            print("How much will " + str(numeric1) + str(sign) + str(numeric2))
+            example = f"{numeric1} {sign} {numeric2}"
 
-            start = default_timer()
-            student_answer = input()
-            stop = default_timer()
-            time_in_seconds += round(stop - start)
+            if example not in unique_examples:
+                unique_examples.append(example)
 
-            while not student_answer.isdigit():
-                print("Must be number")
+                example_number +=1
+
+                print(f"Example {example}")
+
+                start = default_timer()
                 student_answer = input()
+                stop = default_timer()
+                time_in_seconds += round(stop - start)
 
-            if int(student_answer) == correct_answer:
-                print("Excellent!")
-                correct_answers += 1
-            else:
-                print(my_warnings[randint(0, len(my_warnings))-1])
-                print("Correct answer: " + str(correct_answer))
-                fails += 1
-                with open(f'{name}_errors.txt','a')as f:
-                    f.write(f'{numeric1} {sign} {numeric2} 3\n')
+                while not student_answer.isdigit():
+                    print("Must be number")
+                    student_answer = input()
 
+                if int(student_answer) == correct_answer:
+                    print("Excellent!")
+                    correct_answers += 1
+                else:
+                    print(my_warnings[randint(0, len(my_warnings)) - 1])
+                    print("Correct answer: " + str(correct_answer))
+                    fails += 1
+                    with open(f'{name}_errors.txt', 'a')as f:
+                        f.write(f'{numeric1} {sign} {numeric2} 3\n')
 
 
     if time_in_seconds < 60:
@@ -195,7 +206,8 @@ print('Welcome ' + name)
 while True:
 
     if os.path.exists(f'{name}_errors.txt'):
-        mode = select_mode()
+        pass
+    mode = select_mode()
 
     if mode == "1":
         count()
