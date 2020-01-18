@@ -32,6 +32,14 @@ def select_mode():
     return mode
 
 
+def settings():
+    file = 'settings.txt'
+
+    if os.path.exists(file):
+        with open(file, 'r') as f:
+            pass
+
+
 def count():
 
     sleep(1)
@@ -41,7 +49,6 @@ def count():
 
     answers_quantity = ''  # количество примеров
     maximum_answer = ''  # до скольки будет считать
-    question = ''
     correct_answers = 0
     fails = 0
     time_in_seconds = 0
@@ -80,59 +87,68 @@ def count():
 
     col_unique_examples = int(maximum_answer) ** 2
 
-    while example_number < col_unique_examples:
+    #Пока не достигним макс количетсва уникальных примеров
+    while not len(unique_examples) == col_unique_examples:  
 
-        for i in range(int(answers_quantity)):
+        if not example_number > int(answers_quantity):
+    
+            for i in range(int(answers_quantity)):
 
-            # случайным образом сгенерируем
-            numeric1 = randint(1, int(maximum_answer))  # левый операнд
-            numeric2 = randint(1, int(maximum_answer))  # правый операнд
-            sign = choice('+-')  # арифметический оператор
+                # случайным образом сгенерируем
+                numeric1 = randint(1, int(maximum_answer))  # левый операнд
+                numeric2 = randint(1, int(maximum_answer))  # правый операнд
+                sign = choice('+-')  # арифметический оператор
 
-            # вычислим результат в зависимости от операции
-            if sign == '-':
-                # исключим отрицательный ответ
-                while numeric1 < numeric2:
-                    numeric1 = randint(1, int(maximum_answer))  # левый операнд
-                    numeric2 = randint(1, int(maximum_answer))  # правый операнд
+                # вычислим результат в зависимости от операции
+                if sign == '-':
+                    # исключим отрицательный ответ
+                    while numeric1 < numeric2:
+                        numeric1 = randint(1, int(maximum_answer))  # левый операнд
+                        numeric2 = randint(1, int(maximum_answer))  # правый операнд
 
-                correct_answer = numeric1 - numeric2
-            if sign == '+':
-                # исключим превышение максимально допустимого ответа
-                while numeric1 + numeric2 > int(maximum_answer):
-                    numeric1 = randint(1, int(maximum_answer))
-                    numeric2 = randint(1, int(maximum_answer))
+                    correct_answer = numeric1 - numeric2
+                if sign == '+':
+                    # исключим превышение максимально допустимого ответа
+                    while numeric1 + numeric2 > int(maximum_answer):
+                        numeric1 = randint(1, int(maximum_answer))
+                        numeric2 = randint(1, int(maximum_answer))
 
-                correct_answer = numeric1 + numeric2
+                    correct_answer = numeric1 + numeric2
 
-            example = f"{numeric1} {sign} {numeric2}"
+                example = f"{numeric1} {sign} {numeric2}"
 
-            if example not in unique_examples:
-                unique_examples.append(example)
+                while example not in unique_examples:
+                    unique_examples.append(example)
 
-                example_number +=1
+                    example_number +=1
+                    if example_number > int(answers_quantity):   
+                        break
+                    print(f"Example {example}")
 
-                print(f"Example {example}")
-
-                start = default_timer()
-                student_answer = input()
-                stop = default_timer()
-                time_in_seconds += round(stop - start)
-
-                while not student_answer.isdigit():
-                    print("Must be number")
+                    start = default_timer()
                     student_answer = input()
+                    stop = default_timer()
+                    time_in_seconds += round(stop - start)
 
-                if int(student_answer) == correct_answer:
-                    print("Excellent!")
-                    correct_answers += 1
-                else:
-                    print(my_warnings[randint(0, len(my_warnings)) - 1])
-                    print("Correct answer: " + str(correct_answer))
-                    fails += 1
-                    with open(f'{name}_errors.txt', 'a')as f:
-                        f.write(f'{numeric1} {sign} {numeric2} 3\n')
+                    while not student_answer.isdigit():
+                        print("Must be number")
+                        student_answer = input()
 
+                    if int(student_answer) == correct_answer:
+                        print("Excellent!")
+                        correct_answers += 1
+                    else:
+                        print(my_warnings[randint(0, len(my_warnings)) - 1])
+                        print("Correct answer: " + str(correct_answer))
+                        fails += 1
+                        with open(f'{name}_errors.txt', 'a')as f:
+                            f.write(f'{numeric1} {sign} {numeric2} 3\n')
+        else:
+            break
+    else:
+        print()
+        if not example_number > int(answers_quantity):
+            print("Unique examples is over")
 
     if time_in_seconds < 60:
         spend_time = f"{time_in_seconds} seconds"
@@ -141,6 +157,7 @@ def count():
         seconds = time_in_seconds - (minutes * 60)
         if seconds > 0:
              spend_time = f"{minutes} minutes and {seconds} seconds"
+             
     if fails == 0:
         print(f"You got it {spend_time}")
         print(f'Well done, {name}! You answered all the questions correctly ')
@@ -193,13 +210,14 @@ def fix_errors(name):
         if os.path.getsize(file) <1:
             os.remove(file)
 
-# main program block
-print('Hello! My name is Rodjer. And you name?')
+            
+#  main program block
+print('Hello! My name is Rodjer. And your name?')
 name = input()
+
 name = name.title()
 
-def settings():
-    pass
+  
 
 print('Welcome ' + name)
 
