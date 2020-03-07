@@ -3,8 +3,37 @@ from timeit import default_timer
 from time import sleep
 from random import randint, choice
 import os
+import json
 
+def entrance():
+    users_file_name = 'users.json'
+
+    if not os.path.exists(users_file_name):
+        with open(users_file_name, 'w') as f:
+            users_list = {'aaa':'12345'}
+            json.dump(users_list, f)
+
+    with open(users_file_name, 'r', encoding='utf-8') as f2:
+        users_list = json.load(f2)
+
+    login = input('What is your name?\n')
+
+    if login in users_list:
+        password = input('enter your password\n')
+        print ('User found')
+        if users_list[login] == password:
+            print('Welcome')
+            return login
+    else:
+        print('User not found')
+        password = input('create password\n')
+        users_list[login] = password
+        with open(users_file_name, 'w', encoding='utf-8') as f:
+            json.dump(users_list, f ,ensure_ascii=False)
+
+        return login
 def select_mode():
+    mode = ''
     if not os.path.exists(f'{name}_errors.txt'):
 
         print("1 = workout")
@@ -33,11 +62,7 @@ def select_mode():
 
 
 def settings():
-    file = 'settings.txt'
-
-    if os.path.exists(file):
-        with open(file, 'r') as f:
-            pass
+  pass  
 
 
 def count():
@@ -212,12 +237,9 @@ def fix_errors(name):
 
             
 #  main program block
-print('Hello! My name is Rodjer. And your name?')
-name = input()
 
+name = entrance() 
 name = name.title()
-
-  
 
 print('Welcome ' + name)
 
