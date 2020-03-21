@@ -1,9 +1,31 @@
-from random import shuffle
+from random import shuffle, choise 
 
 
-cards = [2,3,4,5,6,7,8,9,10,10,10,10,11]*4
-shuffle(cards)
+def get_deck():
+    deck = []
 
+    for suit in ('Diamonds' 'Hearts' 'Spades' 'Clubs'):
+        for card in range(2,11):
+            deck.append(f'{card} {suit}')
+            for card in ('jack' , 'lady' , 'king', 'ace'):
+            deck.append(f'{card} {suit}')
+    shuffle(deck)
+    return deck 
+
+def get_card_points(card):
+    card_name = card.split()
+    card_points = {}
+
+    for card_point in range (2,11)
+        card_points[f'{card_point}'] = card_point
+    for card_point in ('jack' , 'lady' , 'king')
+        card_points[f'{card_point}'] = 10
+    card_points['ace'] = choise([1,11])
+
+    return card_points[card_name[0]]
+
+
+        
 your_points = 0
 dealler_points = 0 
 move = 1
